@@ -1,13 +1,15 @@
 import * as React from 'react';
 
 export interface IInputFileProps {
-  setSelectedFile: Function;
+  setSelectedFile: (value: React.ChangeEvent<HTMLInputElement>) => void;
   selectedFile: any;
 }
 
 export default function InputFile(props: IInputFileProps) {
+  const { setSelectedFile, selectedFile } = props;
   return (
-    <div className="photo">
+    <div className="p-1 m-1">
+      <h3>Input File</h3>
       <label>
         Click Me
         <input
@@ -15,8 +17,8 @@ export default function InputFile(props: IInputFileProps) {
           id="photo"
           name="photo"
           accept="image/png, image/jpeg"
-          onChange={(e) => props.setSelectedFile(e)}
-          value={props.selectedFile}
+          onChange={setSelectedFile}
+          value={selectedFile}
         />
       </label>
     </div>

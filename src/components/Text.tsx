@@ -5,5 +5,11 @@ export interface ITextProps {
 }
 
 export default function Text(props: ITextProps) {
-  return <div className="text-primary">{props.message}</div>;
+  const { message = '' } = props;
+  return (
+    <div className="m-1 p-1">
+      <h3>Text</h3>
+      <div>{message}</div>
+    </div>
+  );
 }

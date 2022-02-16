@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface IInputTextProps {
-  handleChange: Function;
+  handleChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   label: string;
 }
@@ -20,15 +20,17 @@ export interface IInputTextProps {
 // }
 
 export default function InputText(props: IInputTextProps) {
+  const { handleChange, value, label } = props;
   return (
-    <div>
+    <div className="m-1 p-1">
       {/* <InputLabel value={props.value} label={props.label} /> */}
+      <h3>Input Text</h3>
       <input
-        placeholder={props.label}
+        placeholder={label}
         name="input"
         type="text"
-        value={props.value}
-        onChange={(e) => props.handleChange(e.target.value)}
+        value={value}
+        onChange={handleChange}
       />
     </div>
   );

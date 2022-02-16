@@ -2,18 +2,15 @@ import * as React from 'react';
 
 export interface IButtonProps {
   labelName: string;
-  changeText: Function;
+  changeText: () => void;
 }
 
 export default function Button(props: IButtonProps) {
+  const { labelName, changeText } = props;
   return (
-    <div className="m-2 p-2">
-      <button
-        type="button"
-        onClick={() => props.changeText()}
-        className="btn btn-primary"
-      >
-        {props.labelName}
+    <div className="m-1 p-1">
+      <button type="button" onClick={changeText}>
+        {labelName}
       </button>
     </div>
   );

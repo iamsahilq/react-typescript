@@ -1,27 +1,27 @@
 import * as React from 'react';
-
-import { Form } from 'react-bootstrap';
 export interface ISelectProps {
   options: string[];
-  onChange: Function;
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export default function Select(props: ISelectProps) {
+  const { options, onChange } = props;
   return (
-    <div>
+    <div className="m-1 p-2">
       Simple select element of react-bootstrap
       <hr />
       Select any color :
-      <Form.Control
-        as="select"
-        onChange={(e) => props.onChange(e.target.value)}
+      <select
+        defaultValue={options[0]}
+        className="form-select"
+        onChange={onChange}
       >
-        {props.options.map((op) => (
-          <option key={op} value={op}>
+        {options.map((op, i) => (
+          <option key={i} value={op} selected>
             {op}
           </option>
         ))}
-      </Form.Control>
+      </select>
     </div>
   );
 }

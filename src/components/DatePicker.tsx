@@ -5,16 +5,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 export interface IDatePickerCProps {
   date: Date;
-  onDateChange: Function;
+  onDateChange: (date: Date) => void;
 }
 
 export default function DatePickerC(props: IDatePickerCProps) {
+  const { date, onDateChange } = props;
   return (
-    <div>
-      <DatePicker
-        selected={props.date}
-        onChange={(date) => props.onDateChange(date)}
-      />
+    <div className="p-1 m-1">
+      <h3>Date Picker</h3>
+      <DatePicker selected={date} onChange={onDateChange} />
     </div>
   );
 }
