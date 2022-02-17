@@ -17,7 +17,7 @@ export default function Select(props: ISelectProps) {
         onChange={onChange}
       >
         {options.map((op, i) => (
-          <option key={i} value={op} selected>
+          <option key={i} value={op}>
             {op}
           </option>
         ))}
