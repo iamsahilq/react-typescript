@@ -6,6 +6,7 @@ import './App.css';
 
 import Assignment1 from './pages/Assignment1';
 import Assignment2 from './pages/Assignment2';
+import Assignment3 from './pages/Assignmnet3';
 import LoginPage from './pages/LoginPage';
 import ImageList from './pages/ImageList';
 import { NavBar } from './components/NavBar';
@@ -31,6 +32,7 @@ function App() {
         <Routes>
           <Route path="/1" element={<Assignment1 />} />
           <Route path="/2" element={<Assignment2 />} />
+          <Route path="/3" element={<Assignment3 />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/images" element={<ImageList />} />
         </Routes>

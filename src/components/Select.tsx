@@ -2,18 +2,18 @@ import * as React from 'react';
 export interface ISelectProps {
   options: string[];
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  id?: string;
+  selected: string | number;
 }
 
 export default function Select(props: ISelectProps) {
-  const { options, onChange } = props;
+  const { options, onChange, id = 'select', selected } = props;
   return (
     <div className="m-1 p-2">
-      Simple select element of react-bootstrap
-      <hr />
-      Select any color :
       <select
-        defaultValue={options[0]}
+        id={id}
         className="form-select"
+        value={selected}
         onChange={onChange}
       >
         {options.map((op, i) => (

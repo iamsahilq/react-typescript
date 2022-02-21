@@ -18,7 +18,6 @@ export default function ImageList(props: IImageListProps) {
   const [imageListError, setError] = useState('');
 
   const toggleModal = () => {
-    console.log('toggleModal :>> ', modalOpen);
     setModal(!modalOpen);
   };
   useEffect(() => {

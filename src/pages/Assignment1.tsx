@@ -30,7 +30,7 @@ export default class Assignment1 extends Component<Props, State> {
             ></InputText>
             <Button
               labelName="Change Text"
-              changeText={this.onButtonClick}
+              onClick={this.onButtonClick}
             ></Button>
           </div>
         </div>

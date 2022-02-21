@@ -18,6 +18,7 @@ type State = {
 };
 
 const options = ['One', 'Two', 'Three', 'Four'];
+const genders = ['Male', 'Female', 'Other'];
 
 export default class Assignment2 extends Component<Props, State> {
   state = {
@@ -60,7 +61,6 @@ export default class Assignment2 extends Component<Props, State> {
   };
 
   render() {
-    console.log('this.state :>> ', this.state);
     return (
       <div className="row">
         <h1 className="row">Assignment2</h1>
@@ -80,7 +80,11 @@ export default class Assignment2 extends Component<Props, State> {
           </div>
         </div>
         <div>
-          <Select options={options} onChange={this.onOptionChange}></Select>
+          <Select
+            selected={this.state.selectedOption}
+            options={options}
+            onChange={this.onOptionChange}
+          ></Select>
         </div>
         <div>
           <InputFile
@@ -89,7 +93,11 @@ export default class Assignment2 extends Component<Props, State> {
           ></InputFile>
         </div>
         <div>
-          <Radio onChange={this.onRadioChange} id="radio"></Radio>
+          <Radio
+            options={genders}
+            onChange={this.onRadioChange}
+            id="radio"
+          ></Radio>
         </div>
         <div>
           <SliderComponent
