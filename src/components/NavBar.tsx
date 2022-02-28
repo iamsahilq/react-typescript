@@ -48,6 +48,12 @@ export const NavBar = () => {
               >
                 Login
               </Link>
+              <Link
+                className="text-reset text-decoration-none p-2 rounded btn btn-outline-info m-1 float-end float-right"
+                to="/signUp"
+              >
+                Sign Up
+              </Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

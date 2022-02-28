@@ -1,15 +1,17 @@
 import * as React from 'react';
-import UserType from '../types/UserType';
 
 import '../styles/Table.css';
+import { userType, userWithId } from '../types/UserType';
 
 export interface ITableProps {
   headers: string[];
-  data: UserType[];
+  data: userWithId[];
+  editAction: (user: userWithId) => void;
+  deleteAction: (userId: string | number) => void;
 }
 
 export default function Table(props: ITableProps) {
-  const { headers, data } = props;
+  const { headers, data, editAction, deleteAction } = props;
   return (
     <div className="MyTable">
       <table>
@@ -27,6 +29,32 @@ export default function Table(props: ITableProps) {
                 <td>{val.gender}</td>
                 <td>{val.dob}</td>
                 <td>{val.loe}</td>
+                <td>
+                  <img
+                    width={200}
+                    className="preview my20"
+                    src={val.profilePic}
+                    alt=""
+                  />
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    id={val.id as string}
+                    onClick={() => editAction(val)}
+                    className="btn btn-sm btn-secondary"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    id={val.id as string}
+                    onClick={() => deleteAction(val.id)}
+                    className="btn btn-sm btn-danger"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             );
           })}

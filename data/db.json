@@ -1,4 +1,26 @@
 {
+  "users": [
+    {
+      "name": "Sahil",
+      "email": "squreshi@deqode.com",
+      "dob": "2022-02-16",
+      "loe": "H.S.S.",
+      "gender": "Male",
+      "password": "11111111",
+      "profilePic": "https://res.cloudinary.com/learncoding1/image/upload/v1645775361/sz6vpvxmylumafa6whh5.jpg",
+      "id": 1
+    },
+    {
+      "name": "john doe",
+      "email": "another@gmail.com",
+      "dob": "2022-02-08",
+      "loe": "H.S.S.",
+      "gender": "Male",
+      "password": "11111111",
+      "profilePic": "https://res.cloudinary.com/learncoding1/image/upload/v1645785452/tscmtbmqikqp3zxqvpbu.jpg",
+      "id": 2
+    }
+  ],
   "images": [
     {
       "name": "ReactLogo.png",

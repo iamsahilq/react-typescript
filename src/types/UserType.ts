@@ -8,4 +8,8 @@ type userType = {
   password: string;
 };
 
-export default userType;
+interface userWithId extends userType {
+  id: string | number;
+}
+
+export type { userType, userWithId };

@@ -3,7 +3,7 @@ export interface ISelectProps {
   options: string[];
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   id?: string;
-  selected: string | number;
+  selected?: string | number;
 }
 
 export default function Select(props: ISelectProps) {

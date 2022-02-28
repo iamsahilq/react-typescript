@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import InputFile from '../components/InputFile';
 import InputText from '../components/InputText';
 import Radio from '../components/Radio';
 import Select from '../components/Select';
 import Button from '../components/Button';
 import Table from '../components/Table';
+import { FileUploadComponent } from '../components/FileUploadComponent';
 import {
   nameValidation,
   emailValidation,
   passwordValidation,
 } from '../helpers/validationHelpers';
 
-import UserType from '../types/UserType';
+import { userType } from '../types/UserType';
 
 type Props = {};
 
@@ -24,8 +24,13 @@ type State = {
   loe: string;
   password: string;
   confirmPassword: string;
-  valErrors: string[];
-  users: UserType[];
+  errors: {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  };
+  users: userType[];
 };
 
 const genders = ['Male', 'Female', 'Other'];
@@ -49,76 +54,81 @@ export default class Assignment3 extends Component<Props, State> {
     loe: loeOptions[3],
     password: '',
     confirmPassword: '',
-    valErrors: [],
+    errors: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
   };
   state = { ...this.initialState, users: [] };
+
   onChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const { id, value } = event.target;
-    this.setState({
-      ...this.state,
-      [id]: value,
-      valErrors: [],
-    });
-  };
-  onSubmit = () => {
-    const {
-      name,
-      email,
-      dob,
-      gender,
-      profilePic,
-      loe,
-      password,
-      confirmPassword,
-    } = this.state;
-    const errors: string[] = [];
-    let err = nameValidation(name);
-    if (err.length) errors.push(err);
-    err = emailValidation(email);
-    if (err.length) errors.push(err);
-    err = passwordValidation(password);
-    if (err.length) errors.push(err);
-    if (password !== confirmPassword) {
-      errors.push('Password does not match');
+    let errors = this.state.errors;
+    switch (id) {
+      case 'name':
+        errors.name = nameValidation(value);
+        break;
+      case 'email':
+        errors.email = emailValidation(value);
+        break;
+      case 'password':
+        errors.password = passwordValidation(value);
+        break;
+      case 'confirmPassword':
+        errors.password =
+          this.state.password !== value ? 'Passwords do not match' : '';
+        break;
+      default:
+        break;
     }
-    if (errors.length) {
+    this.setState(Object.assign(this.state, { errors, [id]: value }));
+    console.log(this.state.errors);
+  };
+
+  onSubmit = () => {
+    let validity = true;
+    Object.values(this.state.errors).forEach(
+      (val) => val.length > 0 && (validity = false),
+    );
+    if (validity === true) {
+      console.log('Registering can be done');
+      const { name, email, dob, gender, profilePic, loe, password } =
+        this.state;
+      const user: userType = {
+        name,
+        email,
+        dob,
+        gender,
+        profilePic,
+        loe,
+        password,
+      };
       this.setState({
         ...this.state,
-        valErrors: errors,
+        ...this.initialState,
+        users: [...this.state.users, user],
       });
-      return;
+    } else {
+      console.log('You cannot be registered!!!');
     }
-    const user: UserType = {
-      name,
-      email,
-      dob,
-      gender,
-      profilePic,
-      loe,
-      password,
-    };
-    this.setState({
-      ...this.state,
-      ...this.initialState,
-      users: [...this.state.users, user],
-    });
   };
-  setSelectedFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      this.setState({ profilePic: e.target.files[0] });
-    }
+  setSelectedFile = (file: File) => {
+    this.setState({ profilePic: file });
   };
 
   render() {
+    const { errors } = this.state;
     return (
       <div className="row">
         <h1 className="row">Assignment 3</h1>
         <div className="row">
-          <div className="col">
+          <form className="col" onSubmit={this.onSubmit} noValidate>
             <InputText
               handleChange={this.onChange}
               value={this.state.name}
@@ -127,6 +137,9 @@ export default class Assignment3 extends Component<Props, State> {
               validationFunction={nameValidation}
               required={true}
             ></InputText>
+            {errors.name.length > 0 && (
+              <span style={{ color: 'red' }}>{errors.name}</span>
+            )}
             <InputText
               required={true}
               handleChange={this.onChange}
@@ -136,6 +149,9 @@ export default class Assignment3 extends Component<Props, State> {
               id="email"
               validationFunction={emailValidation}
             ></InputText>
+            {errors.email.length > 0 && (
+              <span style={{ color: 'red' }}>{errors.email}</span>
+            )}
             <InputText
               required={true}
               handleChange={this.onChange}
@@ -143,17 +159,13 @@ export default class Assignment3 extends Component<Props, State> {
               label="Date"
               id="dob"
               type="date"
-              // validationFunction={emailValidation}
             ></InputText>
             <Radio
               options={genders}
               onChange={this.onChange}
               id="gender"
             ></Radio>
-            <InputFile
-              selectedFile={this.state.profilePic}
-              setSelectedFile={this.setSelectedFile}
-            ></InputFile>
+            <FileUploadComponent onFileChange={this.setSelectedFile} />
             <Select
               selected={this.state.loe}
               options={loeOptions}
@@ -166,29 +178,35 @@ export default class Assignment3 extends Component<Props, State> {
               type="password"
               label="Password"
               id="password"
-              validationFunction={passwordValidation}
               required={true}
             ></InputText>
+            {errors.password.length > 0 && (
+              <span style={{ color: 'red' }}>{errors.password}</span>
+            )}
             <InputText
               handleChange={this.onChange}
               value={this.state.confirmPassword}
               label="Confirm Password"
               type="password"
               id="confirmPassword"
-              validationFunction={nameValidation}
               required={true}
               match={this.state.password}
             ></InputText>
-            {this.state.valErrors.map((err, index) => (
-              <p className="text-danger" key={index}>
-                {err}
-              </p>
-            ))}
-            <Button labelName="Submit" onClick={this.onSubmit}></Button>
-          </div>
+            {errors.confirmPassword.length > 0 && (
+              <span style={{ color: 'red' }}>{errors.confirmPassword}</span>
+            )}
+            <div className="submit">
+              <Button labelName="Submit" onClick={this.onSubmit}></Button>
+            </div>
+          </form>
         </div>
         <div className="row">
-          <Table headers={tableHeaders} data={this.state.users}></Table>
+          <Table
+            headers={tableHeaders}
+            data={this.state.users}
+            deleteAction={() => console.log('delete')}
+            editAction={() => console.log('edit')}
+          ></Table>
         </div>
       </div>
     );
