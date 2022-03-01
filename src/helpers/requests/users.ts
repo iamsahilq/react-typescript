@@ -9,6 +9,10 @@ class Users {
     return axios.get(`/users/${userId}`);
   }
 
+  static getUserById(id: string | number) {
+    return axios.get(`/users?id=${id}`);
+  }
+
   static getUserByQuery(query: string) {
     console.log('query', query);
     return axios.get(`/users?${query}`);

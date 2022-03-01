@@ -1,13 +1,14 @@
 {
   "users": [
     {
-      "name": "Sahil",
-      "email": "squreshi@deqode.com",
+      "email": "squreshi@deqode.in",
       "dob": "2022-02-16",
-      "loe": "H.S.S.",
+      "name": "Sahil",
       "gender": "Male",
+      "loe": "P.G.",
       "password": "11111111",
-      "profilePic": "https://res.cloudinary.com/learncoding1/image/upload/v1645775361/sz6vpvxmylumafa6whh5.jpg",
+      "confirmPassword": "11111111",
+      "currentFile": {},
       "id": 1
     },
     {

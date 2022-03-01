@@ -32,7 +32,7 @@ interface IFormInput {
   loe: string;
   password: string;
   confirmPassword: string;
-  currentFile: File;
+  currentFile?: File;
 }
 
 const schema = yup.object().shape({
@@ -74,24 +74,13 @@ function SignUp() {
   const [updating, setUpdate] = useState(false);
 
   const [file, setImage] = useState<File | undefined>();
+  const [previewImage, setPreviewImage] = useState('');
 
   const [error, setError] = useState('');
 
-  const [previewImage, setPreviewImage] = useState('');
   const [userId, setUid] = useState<string | number>('');
 
   const [users, setUsers] = useState<userWithId[]>([]);
-
-  const initForm = {
-    email: '',
-    name: '',
-    loe: '',
-    gender: '',
-    password: '',
-    confirmPassword: '',
-  };
-
-  const [preloadedValue, setPreloaded] = useState(initForm);
 
   const {
     register,
@@ -100,32 +89,30 @@ function SignUp() {
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>({
-    defaultValues: preloadedValue,
     resolver: yupResolver(schema),
   });
 
   const updateUser = async (data: IFormInput) => {
-    console.log('userId', userId);
-    console.log('data', data);
+    Users.updateUser(userId, data).then((res) => {
+      if (res.status === 200) {
+        setUpdate(false);
+        reset();
+        setError('');
+      } else {
+        setError(res.data.message);
+      }
+    });
   };
 
   const editAction = (user: userWithId) => {
-    setUpdate(true);
-    setPreloaded({
-      email: user.email,
-      name: user.name,
-      loe: user.loe,
-      gender: user.gender,
-      password: user.password,
-      confirmPassword: user.password,
-    });
     setUid(user.id);
+    setUpdate(true);
   };
 
   const cancelAction = () => {
     setUpdate(false);
-    setPreloaded(initForm);
     setUid('');
+    reset();
   };
 
   const deleteAction = async (userId: string | number) => {
@@ -143,7 +130,10 @@ function SignUp() {
     }
 
     const { email, name, password, dob, loe, gender, currentFile } = data;
-    let picUrl = await uploadFileToCloudinary(currentFile);
+    let picUrl = '';
+    if (currentFile) {
+      picUrl = await uploadFileToCloudinary(currentFile);
+    }
     const user = {
       name,
       email,
@@ -174,30 +164,34 @@ function SignUp() {
   };
 
   useEffect(() => {
-    Users.getAllUsers()
-      .then((res) => {
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
+    if (updating) {
+      // get user and set form fields
+      Users.getUserById(userId).then(({ data }) => {
+        const usr = data[0];
+        console.log('usr', usr);
+        const fields = [
+          'email' as keyof IFormInput,
+          'name' as keyof IFormInput,
+          'gender' as keyof IFormInput,
+          'dob' as keyof IFormInput,
+          'loe' as keyof IFormInput,
+          'password' as keyof IFormInput,
+          'confirmPassword' as keyof IFormInput,
+        ];
+        fields.forEach((field) => setValue(field, usr[field]));
+        // setUser(user);
       });
-  }, []);
+    } else {
+      Users.getAllUsers()
+        .then((res) => {
+          setUsers(res.data);
+        })
+        .catch((err) => {
+          setError(err.message);
+        });
+    }
+  }, [setValue, updating, userId]);
 
-  useEffect(() => {
-    Users.getAllUsers()
-      .then((res) => {
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, []);
-
-  // effect runs when user state is updated
-  useEffect(() => {
-    // reset form with user data
-    reset(preloadedValue);
-  }, [preloadedValue]);
   return (
     <Container maxWidth="xs">
       <Typography className={heading} variant="h3">
@@ -230,7 +224,6 @@ function SignUp() {
         />
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
-          // defaultValue="Female"
           {...register('gender')}
         >
           {genders.map((op, i) => (
